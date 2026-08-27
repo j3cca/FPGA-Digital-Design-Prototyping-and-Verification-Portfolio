@@ -27,4 +27,4 @@ Projects in this repository were primarily developed and verified in Vivado, tar
 *   <a href="./02- Data Processing and DSP/Parametric-Bit-Manipulation-Unit">Parametric Bit-Manipulation Unit</a> (CMOD S7)
 
 ### <a href="./03- Timing and Control">03 - Timing and Control</a>
-*   <a href="./03- Timing and Control/Configurable-Timing-Engine-Pulse-and-PWM-Generators">Configurable Timing Engine: Pulse and PWM Generators</a> (CMOD S7)
+*   <a href="./03- Timing and Control/Configurable Timing-Engine-Pulse-and-PWM-Generators">Configurable Timing Engine: Pulse and PWM Generators</a> (CMOD S7)
