@@ -17,17 +17,17 @@ Projects in this repository were primarily developed and verified in Vivado, tar
 
 ## Table of Contents
 
-### [01 - Foundational Logic Primitives](./01- Foundational Logic Primatives)
-*   **[4-Bit Greater-Than Comparator](./01- Foundational Logic Primatives/4-Bit-Greater-Than-Comparator)** (CMOD S7)
-*   **[4-to-16 Decoder](./01- Foundational Logic Primatives/4-to-16-Decoder)** (CMOD S7)
+### [01 - Foundational Logic Primitives](./01-Foundational-Logic-Primitives)
+*   **[4-Bit Greater-Than Comparator](./01-Foundational-Logic-Primitives/4-Bit-Greater-Than-Comparator)** (CMOD S7)
+*   **[4-to-16 Decoder](./01-Foundational-Logic-Primitives/4-to-16-Decoder)** (CMOD S7)
 
-### [02 - Data Processing and DSP](./02- Data Processing and DSP)
-*   **[Bidirectional Int to Floating Point Converter](./02- Data Processing and DSP/Bidirectional-Int-to-Floating-Point-Converter)** (CMOD S7)
+### [02 - Data Processing and DSP](./02-Data-Processing-and-DSP)
+*   **[Bidirectional Int to Floating Point Converter](./02-Data-Processing-and-DSP/Bidirectional-Int-to-Floating-Point-Converter)** (CMOD S7)
     *   *Simulates the data-formatting stage of a medical DSP pipeline using a custom 13-bit IEEE-esque format.*
-*   **[Parametric Bit-Manipulation Unit](./02- Data Processing and DSP/Parametric-Bit-Manipulation-Unit)** (CMOD S7)
+*   **[Parametric Bit-Manipulation Unit](./02-Data-Processing-and-DSP/Parametric-Bit-Manipulation-Unit)** (CMOD S7)
 
-### [03 - Timing and Control](./03- Timing and Control)
-*   **[Configurable Timing Engine: Pulse and PWM Generators](./03- Timing and Control/Configurable Timing-Engine-Pulse-and-PWM-Generators)** (CMOD S7)
+### [03 - Timing and Control](./03-Timing-and-Control)
+*   **[Configurable Timing Engine: Pulse and PWM Generators](./03-Timing-and-Control/Configurable-Timing-Engine-Pulse-and-PWM-Generators)** (CMOD S7)
 
 ### 04 - Advanced Systems & Capstone
 *   **[codec]
