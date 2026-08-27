@@ -17,16 +17,14 @@ Projects in this repository were primarily developed and verified in Vivado, tar
 
 ## Table of Contents
 
-### <a href="./01-Foundational-Logic-Primitives">01 - Foundational Logic Primitives</a>
-*   <a href="./01-Foundational-Logic-Primitives/4-Bit-Greater-Than-Comparator">4-Bit Greater-Than Comparator</a> (CMOD S7)
-*   <a href="./01-Foundational-Logic-Primitives/4-to-16-Decoder">4-to-16-Decoder</a> (CMOD S7)
+### <a href="./01- Foundational Logic Primitives">01 - Foundational Logic Primitives</a>
+*   <a href="./01- Foundational Logic Primitives/4-Bit-Greater-Than-Comparator">4-Bit Greater-Than Comparator</a> (CMOD S7)
+*   <a href="./01- Foundational Logic Primitives/4-to-16-Decoder">4-to-16 Decoder</a> (CMOD S7)
 
-### <a href="./02-Data-Processing-and-DSP">02 - Data Processing and DSP</a>
-*   <a href="./02-Data-Processing-and-DSP/Bidirectional-Int-to-Floating-Point-Converter">Bidirectional Int to Floating Point Converter</a> (CMOD S7)
+### <a href="./02- Data Processing and DSP">02 - Data Processing and DSP</a>
+*   <a href="./02- Data Processing and DSP/Bidirectional-Int-to-Floating-Point-Converter">Bidirectional Int to Floating Point Converter</a> (CMOD S7)
     *   *Simulates the data-formatting stage of a medical DSP pipeline using a custom 13-bit IEEE-esque format.*
-*   <a href="./02-Data-Processing-and-DSP/Parametric-Bit-Manipulation-Unit">Parametric Bit-Manipulation Unit</a> (CMOD S7)
+*   <a href="./02- Data Processing and DSP/Parametric-Bit-Manipulation-Unit">Parametric Bit-Manipulation Unit</a> (CMOD S7)
 
-### <a href="./03-Timing-and-Control">03 - Timing and Control</a>
-*   <a href="./03-Timing-and-Control/Configurable-Timing-Engine-Pulse-and-PWM-Generators">Configurable Timing Engine: Pulse and PWM Generators</a> (CMOD S7)
-
-### <a href="./04-System-Integration">04 - System Integration</a>
+### <a href="./03- Timing and Control">03 - Timing and Control</a>
+*   <a href="./03- Timing and Control/Configurable-Timing-Engine-Pulse-and-PWM-Generators">Configurable Timing Engine: Pulse and PWM Generators</a> (CMOD S7)
