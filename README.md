@@ -1,7 +1,8 @@
-# SystemVerilog FPGA Prototyping and Verification Portfolio
+# FPGA Digital Design, Prototyping, and Verification Portfolio
 
-A growing collection of synthesizable SystemVerilog modules and self-checking testbenches. 
-*(Guided in part by "FPGA Prototyping by SystemVerilog Examples" by Pong P. Chu and "SystemVerilog for Verification" by Chris Spear).*
+A growing collection of synthesizable RTL modules, DSP pipelines, and self-checking testbenches developed across **SystemVerilog, Verilog, and VHDL**. 
+
+*(Guided in part by "FPGA Prototyping by SystemVerilog Examples" by Pong P. Chu, "FPGA Prototyping by VHDL Examples" by Pong P. Chu, and "SystemVerilog for Verification" by Chris Spear).*
 
 ### About Me
 As a Computer Engineering senior with a prior B.S. in Biomedical Sciences, my focus is on bridging hardware engineering and healthcare. I am passionate about designing robust, high-performance digital logic and DSP architectures for MedTech applications. This repository serves as a comprehensive portfolio of my independent prototyping, academic projects, and capstone work.
@@ -16,17 +17,17 @@ Projects in this repository were primarily developed and verified in Vivado, tar
 
 ## Table of Contents
 
-### 01 - Foundational Logic Primitives
-*   **[4-Bit Greater-Than Comparator](./path)** (CMOD S7)
-*   **[4-to-16 Decoder](./path)** (CMOD S7)
+### [01 - Foundational Logic Primitives](./01- Foundational Logic Primatives)
+*   **[4-Bit Greater-Than Comparator](./01- Foundational Logic Primatives/4-Bit-Greater-Than-Comparator)** (CMOD S7)
+*   **[4-to-16 Decoder](./01- Foundational Logic Primatives/4-to-16-Decoder)** (CMOD S7)
 
-### 02 - Data Processing and DSP
-*   **[Bidirectional Int to Floating Point Converter](./path)** (CMOD S7)
+### [02 - Data Processing and DSP](./02- Data Processing and DSP)
+*   **[Bidirectional Int to Floating Point Converter](./02- Data Processing and DSP/Bidirectional-Int-to-Floating-Point-Converter)** (CMOD S7)
     *   *Simulates the data-formatting stage of a medical DSP pipeline using a custom 13-bit IEEE-esque format.*
-*   **[Parametric Bit-Manipulation Unit](./path)** (CMOD S7)
+*   **[Parametric Bit-Manipulation Unit](./02- Data Processing and DSP/Parametric-Bit-Manipulation-Unit)** (CMOD S7)
 
-### 03 - Timing and Control
-*   **[Configurable Timing Engine: Pulse and PWM Generators](./path)** (CMOD S7)
+### [03 - Timing and Control](./03- Timing and Control)
+*   **[Configurable Timing Engine: Pulse and PWM Generators](./03- Timing and Control/Configurable Timing-Engine-Pulse-and-PWM-Generators)** (CMOD S7)
 
 ### 04 - Advanced Systems & Capstone
 *   **[codec]
