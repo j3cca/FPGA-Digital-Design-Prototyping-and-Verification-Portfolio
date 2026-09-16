@@ -1,6 +1,6 @@
 # FPGA Mixed-Signal Audio Recorder (HW/SW Co-Design)
 
-<img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/placeholder_audio_recorder.png" alt="System Block Diagram" width="700"> 
+<img src="https://github.com/j3cca/FPGA-Digital-Design-Prototyping-and-Verification-Portfolio/blob/main/images/audio_recorder_block_diagram.png" alt="System Block Diagram" width="700"> 
 
 > *The system block diagram above shows the architecture for this audio recorder and playback device. The architecture interfaces an SSM2603 Audio Codec and 1Gbit DDR2 RAM via custom FSMs, which is managed by a PicoBlaze soft-core microcontroller driving a serial terminal CLI.* 
 
@@ -13,13 +13,13 @@ Overall, this project was a deep dive into hardware/software co-design, clock-do
 
 ## Architecture & Implementation
 
-**1. Top-Level Integration & Clock Management (`TOP.v`)**
+**1. Top-Level Integration & Clock Management (`audio_recorder_top.v`)**
 Handling multiple clock domains was one of the core challenges of the hardware design:
 * **Clock Tree:** The master clock drives the DDR2 RAM interface, which outputs the main system clock. I used a Xilinx Clock Wizard IP to generate the 100MHz clock for the PicoBlaze and UART, plus 50MHz and 11.2896MHz clocks for the audio codec.
 * **Dual Architecture:** The control logic is split across two synchronous blocks. The 100MHz block handles the PicoBlaze UART I/O and command handshaking, while a RAM-clocked block streams audio samples to and from memory.
 * **Audio Handshaking:** I synchronized the codec's sample flags directly into the DDR2 state machine to ensure zero sample drift or tearing during capture and playback.
 
-**2. PicoBlaze Soft-Core Control & CLI (`main_controller.psm`)**
+**2. PicoBlaze Soft-Core Control & CLI (`PB_controller.psm`)**
 I wrote the assembly control software to manage the user workflow and keep the system stable:
 * **State Tracking:** The system tracks slot occupancy in scratchpad RAM. If a user tries to play or delete an empty slot, the controller returns an error message. If they try to record over an existing message, the controller prompts the user for explicit confirmation; however, upon confirmation, the user can decide to overwrite a recording without first deleting the slot.
 * **Pause/Resume:** I added asynchronous spacebar detection during playback. This sends a hardware pause signal to the Verilog FSM without losing the current system state.
@@ -38,23 +38,23 @@ Originally, I planned to build a graphical user interface for the Anvyl board's 
 
 Because I wanted to maintain strict error checking guidelines, I decided to drop the physical screen and route all UI through PuTTY via UART. I wanted to aim for robustness instead of maximizing features, which I ultimately believe was the best choice.
 
-The biggest weakness of my implementation was the lack of a solid testbench. While I did test a simplified loopback system, I hadn't yet learned how to build self-checking testbenches, and I wasn't sure how to simulate audio signals effectively. As a result, I ended up relying primarily on debugging directly on the hardware, which was time consuming and much less effective. If I were to do this project again, I would design a self-checking testbench that reads from a bank of simulated audio files to verify the implementation before flashing the bitsteam to the hardware.
+The biggest weakness of my implementation was the lack of a solid testbench. While I did test a simplified UART loopback system, I hadn't yet learned how to build self-checking testbenches, and I wasn't sure how to simulate audio signals effectively. As a result, I ended up relying primarily on debugging directly on the hardware, which was time consuming and much less effective. If I were to do this project again, I would design a self-checking testbench that reads from a bank of simulated audio files to verify the implementation before flashing the bitsteam to the hardware.
 
 ## Directory Table of Contents
 <pre>
 FPGA Mixed-Signal Audio Recorder (HW/SW Co-Design)/
 │
 ├── src/
-│   ├── <a href="./src/audio_recorder_top.v">audio_recorder_top.v</a>           # Top-level multi-clock architecture & FSM
-│   ├── <a href="./src/PB_controller.psm">PB_controller.psm</a>              # PicoBlaze CLI, safety locks & UART parser
+│   ├── <a href="./src/audio_recorder_top.v">audio_recorder_top.v</a>           # Top-level Architecture & FSM
+│   ├── <a href="./src/PB_controller.psm">PB_controller.psm</a>              # PicoBlaze Controller
 │   ├── <a href="./src/ram_interface_wrapper.v">ram_interface_wrapper.v</a>        # Modified DDR2 RAM interface wrapper
 │   ├── <a href="./src/i2c_controller.v">i2c_controller.v</a>               # Modified I2C controller for audio codec
-│   ├── <a href="./src/i2c_av_config.v">i2c_av_config.v</a>                # Audio codec configuration
+│   ├── <a href="./src/i2c_av_config.v">i2c_av_config.v</a>                # Modified Audio codec configuration
 │   └── <i>[Standard Xilinx/Digilent IP omitted for brevity]</i>
 │
 ├── constraints/
 │   ├── <a href="./constraints/anvyl_audio_recorder.ucf">anvyl_audio_recorder.ucf</a>       # Main board pinout and clock constraints
-│   └── <a href="./constraints/RAM_Reference_Pins.ucf">RAM_Reference_Pins.ucf</a>         # DDR2 memory controller constraints
+│   └── <a href="./constraints/RAM_Reference_Pins.ucf">RAM_Reference_Pins.ucf</a>         # DDR2 constraints
 │
 └── <a href="./README.md">README.md</a>
 </pre>
