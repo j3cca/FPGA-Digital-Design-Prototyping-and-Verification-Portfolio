@@ -28,3 +28,6 @@ Projects in this repository were primarily developed and verified in Vivado, tar
 
 ### <a href="./03- Timing and Control">03 - Timing and Control</a>
 *   <a href="./03- Timing and Control/Configurable Timing-Engine-Pulse-and-PWM-Generators">Configurable Timing Engine: Pulse and PWM Generators</a> (CMOD S7)
+
+### <a href="./04- System Integration">04 - System Integration</a>
+*   <a href="04- System Integration/FPGA Mixed-Signal Audio Recorder (HW:SW Co-Design)">FPGA Mixed-Signal Audio Recorder (HW:SW Co-Design)</a> (Anvyl)
