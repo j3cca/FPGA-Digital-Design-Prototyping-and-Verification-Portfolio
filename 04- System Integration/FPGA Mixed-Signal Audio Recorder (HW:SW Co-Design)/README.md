@@ -38,7 +38,7 @@ Originally, I planned to build a graphical user interface for the Anvyl board's 
 
 Because I wanted to maintain strict error checking guidelines, I decided to drop the physical screen and route all UI through PuTTY via UART. I wanted to aim for robustness instead of maximizing features, which I ultimately believe was the best choice.
 
-The biggest weakness of my implementation was the lack of a solid testbench. While I did test a simplified loopback system, I hadn't yet learned how to build self-checking testbenches, and I wasn't sure how to simulate audio signals effectively. As a result, I ended up relying primarily on debugging directly on the hardware, which was time consuming and much less effective. If I were to do this project again, I would design a self-checking testbench that reads from a bank of simulated audio files to verify the implementation before flashing the bitsteam to the hardware.
+The biggest weakness of my implementation was the lack of a solid testbench. While I did test a simplified UART loopback system, I hadn't yet learned how to build self-checking testbenches, and I wasn't sure how to simulate audio signals effectively. As a result, I ended up relying primarily on debugging directly on the hardware, which was time consuming and much less effective. If I were to do this project again, I would design a self-checking testbench that reads from a bank of simulated audio files to verify the implementation before flashing the bitsteam to the hardware.
 
 ## Directory Table of Contents
 <pre>
