@@ -2,67 +2,59 @@
 
 <img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/placeholder_audio_recorder.png" alt="System Block Diagram" width="700"> 
 
-> *The system block diagram above shows the end-to-end architecture: interfacing an SSM2603 Audio Codec and 1Gbit DDR2 RAM via custom FSMs, managed centrally by a PicoBlaze soft-core microcontroller driving a serial terminal CLI.* 
+> *The system block diagram above shows the architecture for this audio recorder and playback device. The architecture interfaces an SSM2603 Audio Codec and 1Gbit DDR2 RAM via custom FSMs, which is managed by a PicoBlaze soft-core microcontroller driving a serial terminal CLI.* 
 
 ## Project Overview
-**Description:** I architected and implemented a 5-slot audio recording and playback system on the Digilent Anvyl (Spartan-6) FPGA. While initially assigned as a group project, I took end-to-end technical ownership of the design, independently engineering the top-level hardware integration, multi-clock domain bridging, RAM/codec finite state machines, and the soft-core control software.
+**Description:** For this project, I designed and implemented a 5-slot audio recording and playback system on the Digilent Anvyl (Spartan-6) FPGA. 
 
-The system interfaces with an SSM2603 Audio Codec (via I2C) and 1Gbit onboard DDR2 RAM to manage five independent 10-second audio message slots. At a 44.1 kHz sample rate, each 10-second slot requires 441,000 16-bit memory addresses. A PicoBlaze soft-core microcontroller acts as the central state machine, driving an ASCII-based Serial Terminal (PuTTY) CLI to handle record, play, pause/resume, delete, overwrite protection, and slot validation.
+The system interfaces with an SSM2603 Audio Codec over I2C and uses 1Gbit of onboard DDR2 RAM to store up to five independent 10-second audio messages. At a 44.1 kHz sample rate, each 10-second slot requires 441,000 16-bit memory addresses. To manage the system, I used a PicoBlaze soft-core microcontroller as the central state machine. It drives an ASCII-based Serial Terminal (PuTTY) CLI, allowing users to record, play, pause, resume, and delete audio while handling overwrite protection and slot validation.
 
-From a MedTech perspective, this project mirrors the architecture of an embedded clinical voice-memo or accessible diagnostic feedback device. It highlights disciplined hardware/software co-design, clock-domain crossing, memory boundary protection, and deterministic state handling where invalid inputs trigger hard-coded system fail-safes.
+Overall, this project was a deep dive into hardware/software co-design, clock-domain crossing, memory management, and building robust fail-safes for user input.
 
 ## Architecture & Implementation
 
 **1. Top-Level Integration & Clock Management (`TOP.v`)**
-I designed the top-level hardware architecture to resolve complex multi-clock constraints between the board oscillator, RAM controller, and audio subsystem:
-* **Clock Tree & PLL:** The master clock feeds the DDR2 RAM interface wrapper, which outputs a native system clock (`systemCLK`). I instantiated a Xilinx IP Clock Wizard (`clk_wiz_v3_6`) to synthesize a phase-aligned 100MHz clock (`pb_clk`) for the PicoBlaze and UART, alongside 50MHz (`main_clk`) and 11.2896MHz (`audio_clk`) clocks for the SSM2603 codec.
-* **Dual-Process Architecture:** Control is split across two synchronous blocks—a 100MHz domain handling PicoBlaze UART port I/O and command handshaking (`state_to_verilog`, `slot_num`), and a RAM-clocked domain running the heavy lifting for audio sample-to-RAM streaming (`stReadFromCodec`, `stMemWrite`, `stMemReadReq`).
-* **Audio Handshaking:** Synchronized the codec's `sample_end[1]` and `sample_req[1]` flags directly into the DDR2 state machine to guarantee zero sample drift or tearing during real-time ADC capture and DAC playback.
+Handling multiple clock domains was one of the core challenges of the hardware design:
+* **Clock Tree:** The master clock drives the DDR2 RAM interface, which outputs the main system clock. I used a Xilinx Clock Wizard IP to generate the 100MHz clock for the PicoBlaze and UART, plus 50MHz and 11.2896MHz clocks for the audio codec.
+* **Dual Architecture:** The control logic is split across two synchronous blocks. The 100MHz block handles the PicoBlaze UART I/O and command handshaking, while a RAM-clocked block streams audio samples to and from memory.
+* **Audio Handshaking:** I synchronized the codec's sample flags directly into the DDR2 state machine to ensure zero sample drift or tearing during capture and playback.
 
 **2. PicoBlaze Soft-Core Control & CLI (`main_controller.psm`)**
-I wrote the assembly control software to manage user workflow and safety interlocks:
-* **State & Slot Validation:** Maintained real-time tracking of slot occupancy (`slot_1_full` through `slot_5_full`) in scratchpad RAM. Attempting to play or delete an empty slot triggers an `empty_slot_error`, while re-recording an occupied slot forces an explicit confirmation prompt (`confirm_overwrite`).
-* **Pause/Resume Flow:** Implemented asynchronous spacebar detection (`read_from_uart_for_pause`) during playback that asserts a hardware pause signal to the Verilog FSM (`stWaitForUnPause`) without dropping the system state.
-* **Input Sanitization:** Built strict ASCII range-checking (`invalid_operation`, `invalid_combination`) so malformed serial inputs are immediately flushed with descriptive user feedback.
+I wrote the assembly control software to manage the user workflow and keep the system stable:
+* **State Tracking:** The system tracks slot occupancy in scratchpad RAM. If a user tries to play or delete an empty slot, the controller returns an error message. If they try to record over an existing message, the controller prompts the user for explicit confirmation; however, upon confirmation, the user can decide to overwrite a recording without first deleting the slot.
+* **Pause/Resume:** I added asynchronous spacebar detection during playback. This sends a hardware pause signal to the Verilog FSM without losing the current system state.
+* **Input Sanitization:** Strict ASCII range-checking ensures that any invalid serial inputs are not passed through to the system, which will return specific error messages detailing the issue and allowing the user to make their selection again with the proper input.
 
 ## Verification & Testing
-**Verification Summary:** 
-* **RAM Address Partitioning:** Verified linear boundary math across the 1Gbit address space to prevent memory overflow between slots:
+* **Memory Boundaries:** I mapped out and verified the boundary math across the 1Gbit address space to guarantee slots wouldn't overflow into each other. 
   * Slot 1: `0x000000 – 0x06BBEF` (0 to 440,999)
   * Slot 2: `0x06BBF0 – 0x0D77DF` (441,000 to 881,999)
   * *(and so forth up to Slot 5)*
-* **UART/State Handshaking:** Validated transaction integrity using `data_present` and `buffer_full` flags in assembly to prevent UART transmission lockups during multi-line error strings.
+  * Although my initial implementation scoped twelve, 60-second recordings, I decided to decrease the recording length and number of recordings to better demonstrate the capabilities of the system.
+* **UART Handshaking:** I used `data_present` and `buffer_full` flags in assembly to validate transaction integrity and prevent UART transmission lockups when sending multi-line error messages.
 
 ## Reflection
-This project was a masterclass in resource management and the realities of hardware/software co-design.
+Originally, I planned to build a graphical user interface for the Anvyl board's physical LCD screen. However, the PicoBlaze soft-core processor has a 1K instruction memory limit (for 1 block RAM). Adding thorough error-checking and overwrite protection filled most of the available BRAM, meaning an LCD driver would no longer fit. 
 
-**Engineering Trade-Off: UI vs. System Integrity**  
-I originally scoped the project to render the graphical user interface onto the Anvyl board's physical LCD screen. However, as I expanded the PicoBlaze control assembly, I prioritized implementing exhaustive error-handling, overwrite protection, and slot state validation. Because the PicoBlaze soft-core features strict instruction-memory limits (1K instructions), adding deep error-checking exceeded available block RAM when paired with an LCD driver.
+Because I wanted to maintain strict error checking guidelines, I decided to drop the physical screen and route all UI through PuTTY via UART. I wanted to aim for robustness instead of maximizing features, which I ultimately believe was the best choice.
 
-I made the engineering decision to drop the physical screen and route all UI state through PuTTY via UART. In medical device design, deterministic input sanitization and fail-safe error recovery must always take precedence over local display hardware. Ensuring the system could never overwrite a file without permission, or crash due to a malformed input, was ultimately more valuable to the system's robustness than a local display.
+The biggest weakness of my implementation was the lack of a solid testbench. While I did test a simplified loopback system, I hadn't yet learned how to build self-checking testbenches, and I wasn't sure how to simulate audio signals effectively. As a result, I ended up relying primarily on debugging directly on the hardware, which was time consuming and much less effective. If I were to do this project again, I would design a self-checking testbench that reads from a bank of simulated audio files to verify the implementation before flashing the bitsteam to the hardware.
 
 ## Directory Table of Contents
 <pre>
-FPGA Audio Message Recorder/
+FPGA Mixed-Signal Audio Recorder (HW/SW Co-Design)/
 │
 ├── src/
-│   ├── user_hdl/
-│   │   ├── <a href="./src/user_hdl/TOP.v">TOP.v</a>                      # My top-level multi-clock architecture & FSM
-│   │   └── <a href="./src/user_hdl/clock_wizard_100MHz.v">clock_wizard_100MHz.v</a>      # Custom PLL synthesis wrapper
-│   │
-│   ├── user_software/
-│   │   └── <a href="./src/user_software/main_controller.psm">main_controller.psm</a>        # My PicoBlaze CLI, safety locks & UART parser
-│   │
-│   └── provided_ip/
-│       ├── audio_codec/               # I2C config & SSM2603 driver
-│       ├── ram_interface/             # 1Gbit DDR2 RAM interface wrapper
-│       └── picoblaze/                 # Xilinx PicoBlaze soft-core processor
-│
-├── sim/
-│   └── <a href="./sim/audio_recorder_tb.sv">audio_recorder_tb.sv</a>
+│   ├── <a href="./src/audio_recorder_top.v">audio_recorder_top.v</a>           # Top-level multi-clock architecture & FSM
+│   ├── <a href="./src/PB_controller.psm">PB_controller.psm</a>              # PicoBlaze CLI, safety locks & UART parser
+│   ├── <a href="./src/ram_interface_wrapper.v">ram_interface_wrapper.v</a>        # Modified DDR2 RAM interface wrapper
+│   ├── <a href="./src/i2c_controller.v">i2c_controller.v</a>               # Modified I2C controller for audio codec
+│   ├── <a href="./src/i2c_av_config.v">i2c_av_config.v</a>                # Audio codec configuration
+│   └── <i>[Standard Xilinx/Digilent IP omitted for brevity]</i>
 │
 ├── constraints/
-│   └── <a href="./constraints/Anvyl_Master.ucf">Anvyl_Master.ucf</a>
+│   ├── <a href="./constraints/anvyl_audio_recorder.ucf">anvyl_audio_recorder.ucf</a>       # Main board pinout and clock constraints
+│   └── <a href="./constraints/RAM_Reference_Pins.ucf">RAM_Reference_Pins.ucf</a>         # DDR2 memory controller constraints
 │
 └── <a href="./README.md">README.md</a>
 </pre>
