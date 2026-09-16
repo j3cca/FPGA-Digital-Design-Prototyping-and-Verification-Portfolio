@@ -1,6 +1,6 @@
 # FPGA Mixed-Signal Audio Recorder (HW/SW Co-Design)
 
-<img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/placeholder_audio_recorder.png" alt="System Block Diagram" width="700"> 
+<img src="https://github.com/j3cca/FPGA-Digital-Design-Prototyping-and-Verification-Portfolio/blob/main/images/audio_recorder_block_diagram.png" alt="System Block Diagram" width="700"> 
 
 > *The system block diagram above shows the architecture for this audio recorder and playback device. The architecture interfaces an SSM2603 Audio Codec and 1Gbit DDR2 RAM via custom FSMs, which is managed by a PicoBlaze soft-core microcontroller driving a serial terminal CLI.* 
 
@@ -45,16 +45,16 @@ The biggest weakness of my implementation was the lack of a solid testbench. Whi
 FPGA Mixed-Signal Audio Recorder (HW/SW Co-Design)/
 │
 ├── src/
-│   ├── <a href="./src/audio_recorder_top.v">audio_recorder_top.v</a>           # Top-level multi-clock architecture & FSM
-│   ├── <a href="./src/PB_controller.psm">PB_controller.psm</a>              # PicoBlaze CLI, safety locks & UART parser
+│   ├── <a href="./src/audio_recorder_top.v">audio_recorder_top.v</a>           # Top-level Architecture & FSM
+│   ├── <a href="./src/PB_controller.psm">PB_controller.psm</a>              # PicoBlaze Controller
 │   ├── <a href="./src/ram_interface_wrapper.v">ram_interface_wrapper.v</a>        # Modified DDR2 RAM interface wrapper
 │   ├── <a href="./src/i2c_controller.v">i2c_controller.v</a>               # Modified I2C controller for audio codec
-│   ├── <a href="./src/i2c_av_config.v">i2c_av_config.v</a>                # Audio codec configuration
+│   ├── <a href="./src/i2c_av_config.v">i2c_av_config.v</a>                # Modified Audio codec configuration
 │   └── <i>[Standard Xilinx/Digilent IP omitted for brevity]</i>
 │
 ├── constraints/
 │   ├── <a href="./constraints/anvyl_audio_recorder.ucf">anvyl_audio_recorder.ucf</a>       # Main board pinout and clock constraints
-│   └── <a href="./constraints/RAM_Reference_Pins.ucf">RAM_Reference_Pins.ucf</a>         # DDR2 memory controller constraints
+│   └── <a href="./constraints/RAM_Reference_Pins.ucf">RAM_Reference_Pins.ucf</a>         # DDR2 constraints
 │
 └── <a href="./README.md">README.md</a>
 </pre>
