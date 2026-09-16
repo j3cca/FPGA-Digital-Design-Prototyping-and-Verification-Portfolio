@@ -13,13 +13,13 @@ Overall, this project was a deep dive into hardware/software co-design, clock-do
 
 ## Architecture & Implementation
 
-**1. Top-Level Integration & Clock Management (`TOP.v`)**
+**1. Top-Level Integration & Clock Management (`audio_recorder_top.v`)**
 Handling multiple clock domains was one of the core challenges of the hardware design:
 * **Clock Tree:** The master clock drives the DDR2 RAM interface, which outputs the main system clock. I used a Xilinx Clock Wizard IP to generate the 100MHz clock for the PicoBlaze and UART, plus 50MHz and 11.2896MHz clocks for the audio codec.
 * **Dual Architecture:** The control logic is split across two synchronous blocks. The 100MHz block handles the PicoBlaze UART I/O and command handshaking, while a RAM-clocked block streams audio samples to and from memory.
 * **Audio Handshaking:** I synchronized the codec's sample flags directly into the DDR2 state machine to ensure zero sample drift or tearing during capture and playback.
 
-**2. PicoBlaze Soft-Core Control & CLI (`main_controller.psm`)**
+**2. PicoBlaze Soft-Core Control & CLI (`PB_controller.psm`)**
 I wrote the assembly control software to manage the user workflow and keep the system stable:
 * **State Tracking:** The system tracks slot occupancy in scratchpad RAM. If a user tries to play or delete an empty slot, the controller returns an error message. If they try to record over an existing message, the controller prompts the user for explicit confirmation; however, upon confirmation, the user can decide to overwrite a recording without first deleting the slot.
 * **Pause/Resume:** I added asynchronous spacebar detection during playback. This sends a hardware pause signal to the Verilog FSM without losing the current system state.
