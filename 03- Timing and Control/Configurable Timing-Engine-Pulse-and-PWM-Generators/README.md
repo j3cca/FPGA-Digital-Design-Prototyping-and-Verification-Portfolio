@@ -14,7 +14,7 @@ The pulse width modulation (PWM) generator accepts a control signal that determi
 **Pulse Generator Block Diagram:** 
 <br>
 <img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/pulse_gen_block_diagram.png" width="700">
-> *The design consists of a synchronous cycle counter that acts as a clock divider, and a state machine that tracks the `high_interval` and `low_interval` durations. The logic includes a routing path that forces the output to a safe state if either interval is set to zero, preventing counter underflow.*
+> *The design consists of a synchronous cycle counter that acts as a clock enable signal, and a state machine that tracks the `high_interval` and `low_interval` durations. The logic includes a routing path that forces the output to a safe state if either interval is set to zero, preventing counter underflow.*
 
 **PWM Generator Block Diagram:** 
 <br>
