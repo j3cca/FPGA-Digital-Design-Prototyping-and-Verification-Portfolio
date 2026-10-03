@@ -7,7 +7,7 @@ Rather than utilizing the Chu textbook's simplified format, I engineered a custo
 
 `[12] Sign | [11:8] Exponent | [7:0] Mantissa`
 
-This required routing to handle an implicit hidden leading bit and a 4-bit exponent bias, which allows for more data to be contained within fewer bits, increasing the precision and range of the floating point values. I also included overflow and underflow flags in the decoder to account for the asymmetrical limits of 8-bit 2's Complement arithmetic.
+This required routing to handle an implicit hidden leading bit within the mantissa and a 4-bit exponent bias, which allows for more data to be contained within fewer bits, increasing the precision and range of the floating point values. I also included overflow and underflow flags in the decoder to account for the asymmetrical limits of 8-bit 2's Complement arithmetic.
 
 **Block Diagram:** 
 <br>
