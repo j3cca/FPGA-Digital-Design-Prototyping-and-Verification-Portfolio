@@ -7,14 +7,14 @@ Rather than utilizing the Chu textbook's simplified format, I engineered a custo
 
 `[12] Sign | [11:8] Exponent | [7:0] Mantissa`
 
-This required routing to handle an implicit hidden mantissa bit and a 4-bit exponent bias, which allows for more data to be contained within fewer bits, increasing the precision and range of the floating point values. I also included overflow and underflow flags in the decoder to account for the asymmetrical limits of 8-bit 2's Complement arithmetic.
+This required routing to handle an implicit hidden leading bit and a 4-bit exponent bias, which allows for more data to be contained within fewer bits, increasing the precision and range of the floating point values. I also included overflow and underflow flags in the decoder to account for the asymmetrical limits of 8-bit 2's Complement arithmetic.
 
 **Block Diagram:** 
 <br>
-<img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/int_to_fp_block_diagram.png" width="700">  
+><img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/int_to_fp_block_diagram.png" width="700">  
 > *The unit consists of two main modules. The `int_to_fp` encoder extracts the sign, takes the absolute magnitude, then uses a priority encoder to find the leading '1', which is used to calculate the exponent with bias. I used a barrel shifter to align the mantissa while hiding the leading bit.*
 
-<img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/fp_to_int_block_diagram.png" width="800"> 
+><img src="https://github.com/j3cca/SystemVerilog-FPGA-Prototyping-and-Verification-Portfolio/blob/main/images/fp_to_int_block_diagram.png" width="800"> 
 > *The `fp_to_int` decoder reverses this process by un-biasing the exponent, restoring the hidden '1' (or 0 in the case of denormal numbers), shifting the mantissa back into an integer format, and applying a Two's Complement inverter if the original sign bit was negative. It also includes parallel logic to flag underflow (uf) and overflow (of) conditions.*
 
 ## Simulation
